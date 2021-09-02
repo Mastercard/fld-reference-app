@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.mastercard.fld</groupId>
+	<artifactId>fld-reference-app</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Mastercard oauth1 signer library - See: https://github.com/Mastercard/oauth1-signer-java/releases -->
+		<oauth1-signer-version>1.5.1</oauth1-signer-version>
+
+		<!-- Dependencies used by the generated sources -->
+		<okhttp-version>4.9.1</okhttp-version>
+		<gson-version>2.8.6</gson-version>
+		<gson-fire-version>1.8.5</gson-fire-version>
+		<swagger-core-version>1.6.2</swagger-core-version>
+		<threetenbp-version>1.5.0</threetenbp-version>
+		<junit-version>4.13.2</junit-version>
+		<jsr305-version>3.0.2</jsr305-version>
+
+		<!-- Mastercard Encryption Library -->
+		<client-encryption-version>1.6.0</client-encryption-version>
+		<javax-annotation-version>1.3.2</javax-annotation-version>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${okhttp-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>logging-interceptor</artifactId>
+			<version>${okhttp-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.gsonfire</groupId>
+			<artifactId>gson-fire</artifactId>
+			<version>${gson-fire-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-core-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>${threetenbp-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>${jsr305-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mastercard.developer</groupId>
+			<artifactId>oauth1-signer</artifactId>
+			<version>${oauth1-signer-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mastercard.developer</groupId>
+			<artifactId>client-encryption</artifactId>
+			<version>${client-encryption-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>${javax-annotation-version}</version>
+		</dependency>
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>5.1.0</version>
+				<executions>
+					<execution>
+						<id>fld API REST Client</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>
+							<generatorName>java</generatorName>
+							<!-- No "library" element here means the plugin will use the default 
+								library template ("okhttp-gson") -->
+							<configOptions>
+								<sourceFolder>src/gen/java/</sourceFolder>
+							</configOptions>
+							<!-- Normally the artifact version would match the fld API Documentation 
+								Version -->
+							<apiPackage>com.mastercard.fld.api.fld.api</apiPackage>
+							<groupId>com.mastercard.fld.api.fld</groupId>
+							<artifactId>fld-v1</artifactId>
+							<modelPackage>com.mastercard.fld.api.fld.model</modelPackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
