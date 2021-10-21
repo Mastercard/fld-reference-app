@@ -45,7 +45,7 @@ public class BaseClassUtil {
 
         client = new ApiClient();
         // Below URL is subjected to change as per environment
-        client.setBasePath("https://stage.api.mastercard.com/fld/confirmed-frauds");
+        client.setBasePath("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
         client.setDebugging(true);
 
         
