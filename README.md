@@ -2,6 +2,11 @@
 
 This reference implementation showcases the Fraud and Loss Database (FLD) APIs from: [Mastercard Developers](https://developer.mastercard.com/product/fraud-and-loss-database).
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_fld-api-client-ref-app&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_fld-api-client-ref-app)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_fld-api-client-ref-app&metric=coverage)](https://sonarcloud.io/dashboard?id=Mastercard_fld-api-client-ref-app)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_fld-api-client-ref-app&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Mastercard_fld-api-client-ref-app)
+[![](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Mastercard/fld-api-client-ref-app/blob/master/LICENSE)
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Optional - Installing Markdown Viewer in Google Chrome
@@ -43,6 +48,30 @@ This reference implementation showcases the Fraud and Loss Database (FLD) APIs f
 12. Copy this file into your `src/main/resources` folder and rename it `swagger.yaml`.
 13. Run `mvn clean install` from the root of the project directory.
 14. You should now be able to run all the provided API calls that are organized under `src/main/java/com/mastercard/fld/api`.  
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Configuring Payload Encryption
+The [Mastercard Encryption Library](https://github.com/Mastercard/client-encryption-java) provides interceptor class you can use when configuring your API client. This [interceptor](https://github.com/Mastercard/client-encryption-java#usage-of-the-okhttpfieldlevelencryptioninterceptor-openapi-generator-4xy) will encrypt the payload before sending the request.
+
+**Encryption Config**
+```
+FieldLevelEncryptionConfig config = FieldLevelEncryptionConfigBuilder
+                    .aFieldLevelEncryptionConfig()
+                    .withEncryptionCertificate(cert)
+                    .withEncryptionPath("$", "$")
+                    .withEncryptedValueFieldName("encryptedData")
+                    .withEncryptedKeyFieldName("encryptedKey")
+                    .withOaepPaddingDigestAlgorithmFieldName("oaepHashingAlgorithm")
+                    .withOaepPaddingDigestAlgorithm("SHA-256")
+                    .withEncryptionKeyFingerprintFieldName("publicKeyFingerprint")
+                    .withIvFieldName("iv")
+                    .withFieldValueEncoding(FieldLevelEncryptionConfig.FieldValueEncoding.HEX)
+                    .build();
+```
+
+See also: 
+- [Securing Sensitive Data Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/).
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -90,14 +119,11 @@ Please email [API Support](mailto:apisupport@mastercard.com) with any questions 
 
 ## License and Copyright
 
-Copyright 2021 Mastercard
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0).
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+<p>Copyright 2021 Mastercard</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+the License. You may obtain a copy of the License at:</p>
+<pre><code>   http://www.apache.org/licenses/LICENSE-2.0
+</code></pre>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.</p>
