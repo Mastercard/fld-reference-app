@@ -9,13 +9,6 @@ This reference implementation showcases the Fraud and Loss Database (FLD) APIs f
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Optional - Installing Markdown Viewer in Google Chrome
-
-- Follow the steps [here](https://imagecomputing.net/damien.rohmer/teaching/general/markdown_viewer/index.html) to view .md files in the browser.
-- Paste the README.md file path in the chrome browser.
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Frameworks / Libraries used
 
 - [Apache Maven](https://maven.apache.org/index.html)
