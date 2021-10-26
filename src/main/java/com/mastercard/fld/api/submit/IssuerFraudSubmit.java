@@ -4,30 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mastercard.developer.encryption.EncryptionException;
-import com.mastercard.fld.BaseClassUtil;
 import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.api.fld.ApiResponse;
-import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudSubmissionApi;
 import com.mastercard.fld.api.fld.model.CfcIndicator;
 import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.IssuerFraud;
 import com.mastercard.fld.api.fld.model.TransactionIdentifier;
-import com.mastercard.fld.api.fld.model.UpdatedIssuerFraud;
 import com.mastercard.fld.utility.LoggerUtil;
+import com.mastercard.fld.utility.RequestHelper;
 
 public class IssuerFraudSubmit {
 
+	public RequestHelper helper = new RequestHelper();
+	
 	public static void main(String[] args) {
-		submitIssuerFraud(createRequest());
+		IssuerFraudSubmit call = new IssuerFraudSubmit();
+		call.submitIssuerFraud(call.createRequest());
 	}
 
-	public static ApiResponse<Fraud> submitIssuerFraud(IssuerFraud additionIssuer) {
+	public ApiResponse<Fraud> submitIssuerFraud(IssuerFraud additionIssuer) {
 		ApiResponse<Fraud> response = null;
 		ConfirmedFraudSubmissionApi submissionApi = null;
 		try {
-			BaseClassUtil.setUpEncryptionEnv();
-			submissionApi = new ConfirmedFraudSubmissionApi(BaseClassUtil.getClient());
+			helper.initiateEncryptClient();;
+			submissionApi = helper.apiSubmissionclient();
 			response = submissionApi.submitIssuerFraudWithHttpInfo(additionIssuer);
 			LoggerUtil.logResponse(submissionApi.getApiClient().getBasePath() + "/issuer-frauds", "post", response);
 		} catch (ApiException | EncryptionException exception) {
@@ -35,19 +36,8 @@ public class IssuerFraudSubmit {
 		}
 		return response;
 	}
-
-	public static ApiResponse<Fraud> sendIssuerFDCFraud(UpdatedIssuerFraud changeIssuer) {
-		ConfirmedFraudManagementApi manageApi = null;
-		try {
-			BaseClassUtil.setUpEncryptionEnv();
-			manageApi = new ConfirmedFraudManagementApi(BaseClassUtil.getClient());
-			return manageApi.updateIssuerFraudWithHttpInfo(changeIssuer);
-		} catch (ApiException | EncryptionException exception) {
-			return null;
-		}
-	}
-
-	public static IssuerFraud createRequest() {
+	
+	public IssuerFraud createRequest() {
 		IssuerFraud request = new IssuerFraud();
 
 		request.setRefId("ecb2d943-eabd-42y6-87wd-69c19792vjg1");

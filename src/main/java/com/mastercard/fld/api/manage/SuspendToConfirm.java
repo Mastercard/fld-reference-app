@@ -1,6 +1,5 @@
 package com.mastercard.fld.api.manage;
 
-import com.mastercard.fld.BaseClassUtil;
 import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
@@ -8,17 +7,21 @@ import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.FraudDeleteAndConfirm;
 import com.mastercard.fld.api.fld.model.FraudState;
 import com.mastercard.fld.utility.LoggerUtil;
+import com.mastercard.fld.utility.RequestHelper;
 
 public class SuspendToConfirm {
 
+	public RequestHelper helper = new RequestHelper();
+	
 	public static void main(String[] args) {
-		confirmFraud(createRequest());
+		SuspendToConfirm call = new SuspendToConfirm();
+		call.confirmFraud(call.createRequest());
 	}
 
-	public static ApiResponse<Fraud> confirmFraud(FraudDeleteAndConfirm request) {
+	public ApiResponse<Fraud> confirmFraud(FraudDeleteAndConfirm request) {
 		ApiResponse<Fraud> response = null;
-		BaseClassUtil.setUpEnv();
-		ConfirmedFraudManagementApi fraudApi = new ConfirmedFraudManagementApi(BaseClassUtil.getClient());
+		helper.initiateNonEncryptClient();
+		ConfirmedFraudManagementApi fraudApi = helper.apiManageclient();
 		try {
 			response = fraudApi.fraudStateWithHttpInfo(request);
 			LoggerUtil.logResponse(fraudApi.getApiClient().getBasePath() + "/fraud-states", "put", response);
@@ -28,7 +31,7 @@ public class SuspendToConfirm {
 		return response;
 	}
 
-	public static FraudDeleteAndConfirm createRequest() {
+	public FraudDeleteAndConfirm createRequest() {
 		FraudDeleteAndConfirm request = new FraudDeleteAndConfirm();
 		request.setAuditControlNumber("292328194169030");
 		request.setRefId("ewq3d943-eabd-42y6-87wd-69c19792bdd6");

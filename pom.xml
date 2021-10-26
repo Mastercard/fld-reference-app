@@ -25,6 +25,7 @@
 		<threetenbp-version>1.5.0</threetenbp-version>
 		<junit-version>4.13.2</junit-version>
 		<jsr305-version>3.0.2</jsr305-version>
+		<junit.jupiter.version>5.6.3</junit.jupiter.version>
 
 		<!-- Mastercard Encryption Library -->
 		<client-encryption-version>1.6.0</client-encryption-version>
@@ -92,29 +93,18 @@
 			<artifactId>javax.annotation-api</artifactId>
 			<version>${javax-annotation-version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<version>3.8.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.6.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.6.2</version>
-			<scope>test</scope>
-		</dependency>
+		  <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 

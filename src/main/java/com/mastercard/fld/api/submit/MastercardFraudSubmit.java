@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mastercard.developer.encryption.EncryptionException;
-import com.mastercard.fld.BaseClassUtil;
 import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudSubmissionApi;
@@ -14,19 +13,23 @@ import com.mastercard.fld.api.fld.model.MastercardFraud;
 import com.mastercard.fld.api.fld.model.SafeFraudProvider;
 import com.mastercard.fld.api.fld.model.TransactionIdentifier;
 import com.mastercard.fld.utility.LoggerUtil;
+import com.mastercard.fld.utility.RequestHelper;
 
 public class MastercardFraudSubmit {
 	
+	public RequestHelper helper = new RequestHelper();
+	
 	public static void main(String[] args) {
-		submitMastercardFraud(createRequest());
+		MastercardFraudSubmit call = new MastercardFraudSubmit();
+		call.submitMastercardFraud(call.createRequest());
 	}
 
-	public static ApiResponse<Fraud> submitMastercardFraud(MastercardFraud request) {
+	public ApiResponse<Fraud> submitMastercardFraud(MastercardFraud request) {
 		ConfirmedFraudSubmissionApi fraudApi = null;
 		ApiResponse<Fraud> response = null;
 		try {
-			BaseClassUtil.setUpEncryptionEnv();
-			fraudApi = new ConfirmedFraudSubmissionApi(BaseClassUtil.getClient());
+			helper.initiateEncryptClient();
+			fraudApi = helper.apiSubmissionclient();
 			response =  fraudApi.submitMastercardFraudWithHttpInfo(request);
 			LoggerUtil.logResponse(fraudApi.getApiClient().getBasePath() + "/mastercard-frauds", "post", response);
 		} catch (ApiException | EncryptionException exception) {
@@ -35,7 +38,7 @@ public class MastercardFraudSubmit {
 		return response;
 	}
 
-	public static MastercardFraud createRequest() {
+	public MastercardFraud createRequest() {
 		MastercardFraud request = new MastercardFraud();
 		request.setRefId("ecb2d943-eabd-42y6-87wd-69c19792bdd6");
 		request.setTimestamp("2021-05-24T20:34:37-06:00");

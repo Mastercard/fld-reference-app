@@ -1,6 +1,5 @@
 package com.mastercard.fld.api.manage;
 
-import com.mastercard.fld.BaseClassUtil;
 import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
@@ -9,16 +8,20 @@ import com.mastercard.fld.api.fld.model.FraudDeleteAndConfirm;
 import com.mastercard.fld.api.fld.model.FraudState;
 import com.mastercard.fld.api.fld.model.SafeFraudProvider;
 import com.mastercard.fld.utility.LoggerUtil;
+import com.mastercard.fld.utility.RequestHelper;
 
 public class DeleteFraud {
 	
+	public RequestHelper helper = new RequestHelper();
+	
 	public static void main(String[] args) {
-		deleteFraud(createRequest());
+		DeleteFraud call = new DeleteFraud();
+		call.deleteFraud(call.createRequest());
 	}
 
-	public static ApiResponse<Fraud> deleteFraud(FraudDeleteAndConfirm request) {
-		BaseClassUtil.setUpEnv();
-		ConfirmedFraudManagementApi fraudApi = new ConfirmedFraudManagementApi(BaseClassUtil.getClient());
+	public ApiResponse<Fraud> deleteFraud(FraudDeleteAndConfirm request) {
+		helper.initiateNonEncryptClient();
+		ConfirmedFraudManagementApi fraudApi = helper.apiManageclient();
 		ApiResponse<Fraud> response = null;
 		try {
 			response = fraudApi.fraudStateWithHttpInfo(request);
@@ -29,7 +32,7 @@ public class DeleteFraud {
 		return response;
 	}
 
-	public static FraudDeleteAndConfirm createRequest() {
+	public FraudDeleteAndConfirm createRequest() {
 		FraudDeleteAndConfirm request = new FraudDeleteAndConfirm();
 		request.setTimestamp("2021-07-04T20:34:37-06:00");
 		request.setAuditControlNumber("292328194169030");

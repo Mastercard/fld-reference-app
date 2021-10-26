@@ -1,26 +1,29 @@
 package com.mastercard.fld.api.manage;
 
 import com.mastercard.developer.encryption.EncryptionException;
-import com.mastercard.fld.BaseClassUtil;
 import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
 import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.UpdatedIssuerFraud;
 import com.mastercard.fld.utility.LoggerUtil;
+import com.mastercard.fld.utility.RequestHelper;
 
 public class IssuerFraudChange {
 
+	public RequestHelper helper = new RequestHelper();
+	
 	public static void main(String[] args) {
-		submitIssuerFraudChange(createChangeRequest("292328194169030", "2742"));
+		IssuerFraudChange call = new IssuerFraudChange();
+		call.submitIssuerFraudChange(call.createChangeRequest("292328194169030", "2742"));
 	}
 
-	public static ApiResponse<Fraud> submitIssuerFraudChange(UpdatedIssuerFraud changeIssuer) {
+	public ApiResponse<Fraud> submitIssuerFraudChange(UpdatedIssuerFraud changeIssuer) {
 		ConfirmedFraudManagementApi manageApi = null;
 		ApiResponse<Fraud> response = null;
 		try {
-			BaseClassUtil.setUpEncryptionEnv();
-			manageApi = new ConfirmedFraudManagementApi(BaseClassUtil.getClient());
+			helper.initiateEncryptClient();
+			manageApi = helper.apiManageclient();
 			response = manageApi.updateIssuerFraudWithHttpInfo(changeIssuer);
 			
 			LoggerUtil.logResponse(manageApi.getApiClient().getBasePath() + "/issuer-frauds", "put", response);
@@ -30,7 +33,7 @@ public class IssuerFraudChange {
 		return response;
 	}
 
-	public static UpdatedIssuerFraud createChangeRequest(String acn, String ica) {
+	public UpdatedIssuerFraud createChangeRequest(String acn, String ica) {
 		UpdatedIssuerFraud request = new UpdatedIssuerFraud();
 		request.setIcaNumber(ica);
 		request.setRefId("jes2b943-eabd-42y6-87wd-69c19592vjg2");
