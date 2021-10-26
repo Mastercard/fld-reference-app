@@ -2,7 +2,6 @@ package com.mastercard.fld;
 
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -22,25 +21,25 @@ public class BaseClassUtilTest {
 	@Test
 	public void testLoadProperties() {
 		BaseClassUtil.loadProperties();
-		assertTrue(true);
+		assertNotNull(BASE_URL);
 	}
 	
 	@Test
 	public void testGetProperty() {
 		String returnurl = BaseClassUtil.getProperty(BASE_URL);
-		assertNotNull(returnurl);
+		assertNotNull(BASE_URL);
 	}
 	
 	@Test
 	public void testSetUpEnv() {
 		BaseClassUtil.setUpEnv();
-		assertTrue(true);
+		assertNotNull(BASE_URL);
 	}
 	
 	@Test
 	public void testSetUpEncryptionEnv() throws EncryptionException {
 		BaseClassUtil.setUpEncryptionEnv();
-		assertTrue(true);
+		assertNotNull(BASE_URL);
 	}
 	
 	
