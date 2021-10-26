@@ -33,10 +33,17 @@ This reference implementation showcases the Fraud and Loss Database (FLD) APIs f
 4. Give your project a name and optionally invite other team members, then click continue.
 5. Download the Sandbox Signing Key zip and unzip it. This should result in a `.p12` file. **Note**: On Safari, the file name will be `Unknown`. Rename it to a `.p12` extension.
 6. Finish creating the project.
-7. Copy the downloaded `.p12` file to `src/main/resources` folder in the code.
-8. Navigate to your projects page, found [here](https://developer.mastercard.com/dashboard) and select your project.
-9. Here, under your sandbox keys, you should be able to see a consumer key, default keystore alias and default keystore password. Copy these values into their respective placeholders in `BaseClassUtil`.
-10. Update the value of `signingKeyFilePath` in `BaseClassUtil` to reflect the name of your `.p12` files path. For example, if your `.p12` files name is `TestProject-sandbox.p12`, this value should be set to `src/main/resources/TestProject-sandbox.p12`. 
+7. Navigate to your projects page, found [here](https://developer.mastercard.com/dashboard) and select your project.
+8. Here, under your sandbox keys, you should be able to see a consumer key, default keystore alias and default keystore password.
+9. Copy the downloaded ```.p12``` and ```.pem``` files to ```src/main/resources``` folder in your code.
+10. Open ```src/main/resources/application.properties``` and configure:
+	- ```mastercard.fld.api.url ```- URL of the API. 
+    - ```mastercard.fld.client.p12.path ```- Path to keystore (.p12) file, just change the name as per the downloaded file in step 5. 
+    - ```mastercard.fld.client.ref.app.consumer.key``` - Copy the Consumer key from "Sandbox/Production Keys" section on your project page
+    - ```mastercard.fld.client.ref.app.keystore.alias``` - Alias of your key. Default key alias for the sandbox is ```keyalias```.
+    - ```mastercard.fld.client.ref.app.keystore.password``` -  Password of your Keystore. Default keystore password for sandbox project is ```keystorepassword```.
+    - ```mastercard.fld.client.ref.app.encryption.file ```- Path to encryption key (.pem) file, just change the name as per the downloaded file in step 9, e.g. ```src/main/resources/<fileName>.pem```.
+	- ```mastercard.fld.client.ref.app.encryption.key``` - Copy the encryption key from "Sandbox/Production Keys" section on your project page
 11. Download the most recent yaml file, available [here](https://developer.mastercard.com/fld-fraud-submission/documentation/api-reference/) by clicking on the Open Specification link at the top of the page.
 12. Copy this file into your `src/main/resources` folder and rename it `swagger.yaml`.
 13. Run `mvn clean install` from the root of the project directory.

@@ -19,7 +19,11 @@ import com.mastercard.fld.utility.EncryptionHelper;
 
 import okhttp3.logging.HttpLoggingInterceptor;
 import java.util.Properties;
-
+/**
+ * This class Prepare the Https client with provided User Credential 
+ * @author Mastercard
+ *
+ */
 public class BaseClassUtil {
 
     private static ApiClient client;
@@ -30,15 +34,16 @@ public class BaseClassUtil {
         return client;
     }
     
-    private static final String BASE_URL = "fld.basepath";
-    private static final String CONSUMER_KEY = "fld.consumer.key";
-    private static final String KEYSTORE_PATH = "fld.p12.path";
-    private static final String KEYSTORE_ALIAS = "fld.keystore.alias";
-    private static final String KEYSTORE_PASS = "fld.keystore.pass";
-    private static final String ENCRYPTION_CERT = "fld.encryption.cert";
-    private static final String ENCRYPTION_KEY = "fld.encryption.key";
+    private static final String BASE_URL = "mastercard.fld.api.url";
+    private static final String CONSUMER_KEY = "mastercard.fld.client.ref.app.consumer.key";
+    private static final String KEYSTORE_PATH = "mastercard.fld.client.p12.path";
+    private static final String KEYSTORE_ALIAS = "mastercard.fld.client.ref.app.keystore.alias";
+    private static final String KEYSTORE_PASS = "mastercard.fld.client.ref.app.keystore.password";
+    private static final String ENCRYPTION_CERT = "mastercard.fld.client.ref.app.encryption.file";
+    private static final String ENCRYPTION_KEY = "mastercard.fld.client.ref.app.encryption.key";
 
     private static Properties prop = null;
+    
     private static String propertyFile = "./application.properties";
     
     public static void setProp(Properties prop) {
