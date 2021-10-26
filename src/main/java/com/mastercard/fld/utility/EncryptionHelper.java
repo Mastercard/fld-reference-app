@@ -14,7 +14,7 @@ import com.mastercard.developer.utils.EncryptionUtils;
 /*
  *  Copyright (c) 2021 Mastercard
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,23 +29,17 @@ import com.mastercard.developer.utils.EncryptionUtils;
 
 public class EncryptionHelper {
 
+	private EncryptionHelper() {
+	}
+
 	private static Certificate getEncryptionCertificate(String filePath) throws IOException, CertificateException {
 		Certificate encryptionCertificate = null;
-			System.out.println( "filePath ->" + filePath);
-		try {
-			File file = new File(filePath);
-			
-			System.out.println( "filePath absolute ->" + file.getPath());
-			encryptionCertificate = EncryptionUtils.loadEncryptionCertificate(file.getPath());
-
-		} catch (IOException | CertificateException ex) {
-			throw ex;
-		}
+		File file = new File(filePath);
+		encryptionCertificate = EncryptionUtils.loadEncryptionCertificate(file.getPath());
 		return encryptionCertificate;
 	}
-	
-	
-	public static FieldLevelEncryptionConfig encryptionConfig(String encryptioncert,String fingerprint)
+
+	public static FieldLevelEncryptionConfig encryptionConfig(String encryptioncert, String fingerprint)
 			throws EncryptionException {
 
 		FieldLevelEncryptionConfig config = null;
@@ -60,8 +54,9 @@ public class EncryptionHelper {
 					.withEncryptionKeyFingerprintFieldName("publicKeyFingerprint")
 					.withOaepPaddingDigestAlgorithmFieldName("oaepPaddingDigestAlgorithm")
 					.withFieldValueEncoding(FieldValueEncoding.HEX).build();
-		} catch (EncryptionException | IOException |  CertificateException ex) {
-			throw new EncryptionException("Error occured while creating FieldLevelEncryptionConfig for encryption",ex);
+			
+		} catch (EncryptionException | IOException | CertificateException ex) {
+			throw new EncryptionException("Error occured while creating FieldLevelEncryptionConfig for encryption", ex);
 		}
 
 		return config;

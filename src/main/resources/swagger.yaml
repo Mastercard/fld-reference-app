@@ -219,7 +219,9 @@ components:
             providerId:
               $ref: '#/components/schemas/SafeFraudProvider'
             transactionIdentifiers:
-              $ref: '#/components/schemas/TransactionIdentifier'
+              type: "array"
+              items:
+                $ref: '#/components/schemas/TransactionIdentifier'
             cardNumber:
               description: >-
                 Cardholder account number used in the fraudulent transaction.
@@ -377,7 +379,9 @@ components:
               maxLength: 7
               example: 5450
             transactionIdentifiers:
-              $ref: '#/components/schemas/TransactionIdentifier'
+              type: "array"
+              items:
+                $ref: '#/components/schemas/TransactionIdentifier'
             cardNumber:
               description: >-
                 Cardholder account number used in the fraudulent transaction.
@@ -1292,23 +1296,22 @@ components:
         - FDE
     TransactionIdentifier:
       description: Transaction Identifier containing CFC Indicator the key and value pair.
-      type: array
-      items:
-        type: object
-        properties:
-          cfcKey:
-            $ref: '#/components/schemas/CfcIndicator'
-          cfcValue:
-            description: >-
-              Actual value depending on the 'CFC Indicator' subject to the
-              following validations 1. For ARN, Min Length is 23, Max Length is
-              23 and Data Type is N. 2. For BRN, Min Length is 6, Max Length is
-              9 and Data Type is AN. 3. For TRC, Min Length is 6, Max Length is
-              6 and Data Type is N. 4. For SER, Min Length is 9, Max Length is 9
-              and Data Type is N.
-            type: string
-            minLength: 6
-            maxLength: 23
+      type: object
+      properties:
+        cfcKey:
+          $ref: '#/components/schemas/CfcIndicator'
+        cfcValue:
+          description: >-
+            Actual value depending on the 'CFC Indicator' subject to the
+            following validations 1. For ARN, Min Length is 23, Max Length is
+            23 and Data Type is N. 2. For BRN, Min Length is 6, Max Length is
+            9 and Data Type is AN. 3. For TRC, Min Length is 6, Max Length is
+            6 and Data Type is N. 4. For SER, Min Length is 9, Max Length is 9
+            and Data Type is N.
+          type: string
+          minLength: 6
+          maxLength: 23
+          example: 0111111111999999999999
     Error:
       title: Error
       required:

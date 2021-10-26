@@ -12,24 +12,28 @@ import com.mastercard.fld.api.fld.api.ConfirmedFraudSubmissionApi;
 import com.mastercard.fld.api.fld.model.CfcIndicator;
 import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.IssuerFraud;
+import com.mastercard.fld.api.fld.model.TransactionIdentifier;
 import com.mastercard.fld.api.fld.model.UpdatedIssuerFraud;
-import com.mastercard.fld.model.TransactionIdentifier;
+import com.mastercard.fld.utility.LoggerUtil;
 
 public class IssuerFraudSubmit {
 
 	public static void main(String[] args) {
-		ApiResponse<Fraud> fraudResp = submitIssuerFraud(createRequest());
+		submitIssuerFraud(createRequest());
 	}
 
 	public static ApiResponse<Fraud> submitIssuerFraud(IssuerFraud additionIssuer) {
+		ApiResponse<Fraud> response = null;
 		ConfirmedFraudSubmissionApi submissionApi = null;
 		try {
 			BaseClassUtil.setUpEncryptionEnv();
 			submissionApi = new ConfirmedFraudSubmissionApi(BaseClassUtil.getClient());
-			return submissionApi.submitIssuerFraudWithHttpInfo(additionIssuer);
+			response = submissionApi.submitIssuerFraudWithHttpInfo(additionIssuer);
+			LoggerUtil.logResponse(submissionApi.getApiClient().getBasePath() + "/issuer-frauds", "post", response);
 		} catch (ApiException | EncryptionException exception) {
 			return null;
 		}
+		return response;
 	}
 
 	public static ApiResponse<Fraud> sendIssuerFDCFraud(UpdatedIssuerFraud changeIssuer) {
@@ -51,11 +55,17 @@ public class IssuerFraudSubmit {
 		request.setIcaNumber("2742");
 		request.setAcquirerId("2742");
 
-		List<Object> transactionIdentofoers = new ArrayList<>();
-		TransactionIdentifier trc = new TransactionIdentifier(CfcIndicator.TRC.getValue(), "500011");
-		TransactionIdentifier ser = new TransactionIdentifier(CfcIndicator.SER.getValue(), "500000011");
+		List<TransactionIdentifier> transactionIdentofoers = new ArrayList<>();
+		TransactionIdentifier trc = new TransactionIdentifier();
+		trc.setCfcKey(CfcIndicator.TRC);
+		trc.setCfcValue("500011");
 		transactionIdentofoers.add(trc);
+		
+		TransactionIdentifier ser = new TransactionIdentifier();
+		ser.setCfcKey(CfcIndicator.SER);
+		ser.setCfcValue("500000011");
 		transactionIdentofoers.add(ser);
+		
 		request.setTransactionIdentifiers(transactionIdentofoers);
 
 		request.setCardNumber("5587450000000009197");
@@ -70,27 +80,27 @@ public class IssuerFraudSubmit {
 		request.setTransactionCurrencyCode("840");
 		request.setBillingAmount("3500");
 		request.setBillingCurrencyCode("840");
-		request.setMerchantId("6698696");
 		request.setMerchantName("1234");
 		request.setMerchantCity("city");
+		request.setMerchantId("6698696");
+		request.setMerchantCategoryCode("6010");
 		request.setMerchantStateProvinceCode("CO");
 		request.setMerchantCountryCode("USA");
 		request.setMerchantPostalCode("78786");
-		request.setMerchantCategoryCode("6010");
 		request.setTerminalAttendanceIndicator("1");
 		request.setTerminalId("0");
-		request.setTerminalOperatingEnvironment("1");
 		request.setTerminalCapabilityIndicator("0");
+		request.setTerminalOperatingEnvironment("1");
+		request.setAccountDeviceType("A");
 		request.setCardholderPresenceIndicator("0");
 		request.setCardPresenceIndicator("0");
 		request.setCardInPossession("Y");
+		request.setCvcInvalidIndicator("M");
 		request.setCatLevelIndicator("2");
 		request.setPosEntryMode("06");
-		request.setCvcInvalidIndicator("M");
 		request.setAvsResponseCode("A");
 		request.setAuthResponseCode("40");
 		request.setSecureCode("0");
-		request.setAccountDeviceType("A");
 		request.setAcquirerRoutingTransitNumber("1111111111");
 		request.setIssuerRoutingTransitNumber("1111111111");
 		request.setMemo("Fraud Addition");

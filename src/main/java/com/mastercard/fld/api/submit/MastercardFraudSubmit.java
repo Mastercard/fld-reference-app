@@ -12,23 +12,27 @@ import com.mastercard.fld.api.fld.model.CfcIndicator;
 import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.MastercardFraud;
 import com.mastercard.fld.api.fld.model.SafeFraudProvider;
-import com.mastercard.fld.model.TransactionIdentifier;
+import com.mastercard.fld.api.fld.model.TransactionIdentifier;
+import com.mastercard.fld.utility.LoggerUtil;
 
 public class MastercardFraudSubmit {
-
+	
 	public static void main(String[] args) {
-		ApiResponse<Fraud> fraudResp = submitMastercardFraud(createRequest());
+		submitMastercardFraud(createRequest());
 	}
 
 	public static ApiResponse<Fraud> submitMastercardFraud(MastercardFraud request) {
 		ConfirmedFraudSubmissionApi fraudApi = null;
+		ApiResponse<Fraud> response = null;
 		try {
 			BaseClassUtil.setUpEncryptionEnv();
 			fraudApi = new ConfirmedFraudSubmissionApi(BaseClassUtil.getClient());
-			return fraudApi.submitMastercardFraudWithHttpInfo(request);
+			response =  fraudApi.submitMastercardFraudWithHttpInfo(request);
+			LoggerUtil.logResponse(fraudApi.getApiClient().getBasePath() + "/mastercard-frauds", "post", response);
 		} catch (ApiException | EncryptionException exception) {
 			return null;
 		}
+		return response;
 	}
 
 	public static MastercardFraud createRequest() {
@@ -39,7 +43,7 @@ public class MastercardFraudSubmit {
 		request.setProviderId(SafeFraudProvider.NUMBER_10);
 		request.setCardNumber("5411050000000000037");
 		request.setTransactionAmount("1234");
-		request.setTransactionDate("20210527");
+		request.setTransactionDate("20210727");
 		request.setFraudPostedDate("20210527");
 		request.setFraudTypeCode("01");
 		request.setFraudSubTypeCode("K");
@@ -49,8 +53,10 @@ public class MastercardFraudSubmit {
 		request.setAvsResponseCode("U");
 		request.setAuthResponseCode("00");
 		request.setMemo("Request Description");
-		List<Object> transactionIdentofoers = new ArrayList<>();
-		TransactionIdentifier arn = new TransactionIdentifier(CfcIndicator.ARN.toString(), "01111110713000000040817");
+		List<TransactionIdentifier> transactionIdentofoers = new ArrayList<>();
+		TransactionIdentifier arn = new TransactionIdentifier();
+		arn.setCfcKey(CfcIndicator.ARN);
+		arn.setCfcValue("01111110713000000040817");
 		transactionIdentofoers.add(arn);
 		request.setTransactionIdentifiers(transactionIdentofoers);
 		return request;
