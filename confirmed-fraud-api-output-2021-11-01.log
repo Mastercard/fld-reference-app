@@ -1,4 +1,4 @@
-Sending Request: [post] https://sandbox.api.mastercard.com/fld/confirmed-frauds/mastercard-frauds
+Sending Request: [put] https://sandbox.api.mastercard.com/fld/confirmed-frauds/fraud-states
 
 Response: 200 aaa
 

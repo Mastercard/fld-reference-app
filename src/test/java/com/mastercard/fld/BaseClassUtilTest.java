@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.mastercard.developer.encryption.EncryptionException;
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiClient;
 
 public class BaseClassUtilTest {
@@ -42,5 +43,10 @@ public class BaseClassUtilTest {
 		assertNotNull(BASE_URL);
 	}
 	
+	@Test
+	public void testGetCallback() throws EncryptionException {
+		ApiCallback call = BaseClassUtil.getCallback();
+		assertNotNull(call);
+	}
 	
 }

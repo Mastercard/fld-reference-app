@@ -74,4 +74,17 @@ public class IssuerFraudSubmitTest {
 		Mockito.doReturn(response).when(helper).apiCall(Mockito.any());
 		issuerFraudSubmit.submitIssuerFraud(request);
     }
+    
+    @Test
+    public void testsubmitIssuerFraudFailure() throws ApiException, IOException {
+    	Response response = new Response.Builder().request(new Request.Builder().url("http://url.com").build())
+				.protocol(Protocol.HTTP_1_1).code(200).message("")
+				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
+    	when(helper.getCallback()).thenReturn(callback);
+		when(helper.getClient()).thenReturn(apiclient);
+		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
+		when(fraudApi.submitIssuerFraudCall(Mockito.any(), Mockito.any())).thenReturn(call);
+		Mockito.doThrow(new IOException()).when(helper).apiCall(Mockito.any());
+		issuerFraudSubmit.submitIssuerFraud(request);
+    }
 }

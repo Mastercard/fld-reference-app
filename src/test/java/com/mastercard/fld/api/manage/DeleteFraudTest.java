@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import static org.mockito.Mockito.mock;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -72,6 +71,21 @@ public class DeleteFraudTest {
 		when(fraudApi.getApiClient()).thenReturn(apiclient);
 		when(fraudApi.fraudStateCall(Mockito.any(), Mockito.any())).thenReturn(call);
 		Mockito.doReturn(response).when(helper).apiCall(Mockito.any());
+		deleteFraudObj.deleteFraud(request);
+	}
+	
+	@Test
+	public void deleteFraudFailuer() throws ApiException, IOException {
+		Response response = new Response.Builder().request(new Request.Builder().url("http://url.com").build())
+				.protocol(Protocol.HTTP_2).code(200).message("")
+				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
+
+		when(helper.getCallback()).thenReturn(callback);
+		when(helper.getClient()).thenReturn(apiclient);
+		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
+		when(fraudApi.getApiClient()).thenReturn(apiclient);
+		when(fraudApi.fraudStateCall(Mockito.any(), Mockito.any())).thenReturn(call);
+		Mockito.doThrow(new IOException()).when(helper).apiCall(Mockito.any());
 		deleteFraudObj.deleteFraud(request);
 	}
 
