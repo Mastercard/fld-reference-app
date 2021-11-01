@@ -3,26 +3,35 @@ package com.mastercard.fld.api.manage;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiClient;
 import com.mastercard.fld.api.fld.ApiException;
-import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
-import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.UpdatedIssuerFraud;
 import com.mastercard.fld.utility.RequestHelper;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class IssuerFraudChangeTest {
 	
 	@InjectMocks
-	IssuerFraudChange call;
+	@Spy
+	IssuerFraudChange issuerFraudChange;
 	
 	@Mock
 	RequestHelper helper;
@@ -33,13 +42,18 @@ public class IssuerFraudChangeTest {
 	@Mock
 	ApiClient apiclient;
 	
+	@Mock
+	ApiCallback callback;
+
+	@Mock
+	Call call;
+	
 	UpdatedIssuerFraud request;
 	
 	@Before
     public void init() {
 		MockitoAnnotations.initMocks(this);
-		IssuerFraudChange call = new IssuerFraudChange();
-		request = call.createChangeRequest("292328194169030", "2742");
+		request = issuerFraudChange.createChangeRequest("292328194169030", "2742");
     }
 
     @Test
@@ -48,14 +62,17 @@ public class IssuerFraudChangeTest {
     }
     
     @Test
-    public void testSubmitIssuerFraudChange() throws ApiException {
-    	ApiResponse<Fraud> response = new ApiResponse<>(200, new HashMap<>());
+    public void testSubmitIssuerFraudChange() throws ApiException, IOException {
+    	Response response = new Response.Builder().request(new Request.Builder().url("http://url.com").build())
+				.protocol(Protocol.HTTP_1_1).code(200).message("")
+				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
 		when(helper.apiManageclient()).thenReturn(fraudApi);
-		when(fraudApi.updateIssuerFraudWithHttpInfo(request)).thenReturn(response);
+		when(helper.getCallback()).thenReturn(callback);
+		when(helper.getClient()).thenReturn(apiclient);
 		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
-		when(fraudApi.getApiClient()).thenReturn(apiclient);
-		call.submitIssuerFraudChange(request);	
-		assertNotNull(response);
+		when(fraudApi.updateIssuerFraudCall(Mockito.any(), Mockito.any())).thenReturn(call);
+		Mockito.doReturn(response).when(helper).apiCall(Mockito.any());
+		issuerFraudChange.submitIssuerFraudChange(request);
     }
 
 }

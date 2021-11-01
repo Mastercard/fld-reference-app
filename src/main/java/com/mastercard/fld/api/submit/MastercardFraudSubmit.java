@@ -1,41 +1,51 @@
 package com.mastercard.fld.api.submit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mastercard.developer.encryption.EncryptionException;
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiException;
-import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudSubmissionApi;
 import com.mastercard.fld.api.fld.model.CfcIndicator;
-import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.MastercardFraud;
 import com.mastercard.fld.api.fld.model.SafeFraudProvider;
 import com.mastercard.fld.api.fld.model.TransactionIdentifier;
 import com.mastercard.fld.utility.LoggerUtil;
 import com.mastercard.fld.utility.RequestHelper;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class MastercardFraudSubmit {
 	
-	public RequestHelper helper = new RequestHelper();
+	private RequestHelper helper = new RequestHelper();
 	
 	public static void main(String[] args) {
 		MastercardFraudSubmit call = new MastercardFraudSubmit();
 		call.submitMastercardFraud(call.createRequest());
 	}
 
-	public ApiResponse<Fraud> submitMastercardFraud(MastercardFraud request) {
+	public Response submitMastercardFraud(MastercardFraud request) {
 		ConfirmedFraudSubmissionApi fraudApi = null;
-		ApiResponse<Fraud> response = null;
+		ApiCallback callback = helper.getCallback();
+		Response response = null;
+		
 		try {
 			helper.initiateEncryptClient();
-			fraudApi = helper.apiSubmissionclient();
-			response =  fraudApi.submitMastercardFraudWithHttpInfo(request);
+			fraudApi = new ConfirmedFraudSubmissionApi(helper.getClient());
+			Call call = fraudApi.submitMastercardFraudCall(request, callback);
+			response = helper.apiCall(call);
 			LoggerUtil.logResponse(fraudApi.getApiClient().getBasePath() + "/mastercard-frauds", "post", response);
-		} catch (ApiException | EncryptionException exception) {
+		} catch (ApiException | EncryptionException | IOException exception) {
 			return null;
 		}
 		return response;
+	}	
+
+	public Response updateMastercardFraudCall(Call call)throws IOException {
+		return call.execute();
 	}
 
 	public MastercardFraud createRequest() {

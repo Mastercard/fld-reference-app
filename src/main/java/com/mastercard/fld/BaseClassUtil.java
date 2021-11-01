@@ -7,16 +7,19 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Map;
+import java.util.Properties;
 
 import com.mastercard.developer.encryption.EncryptionException;
 import com.mastercard.developer.interceptors.OkHttpFieldLevelEncryptionInterceptor;
 import com.mastercard.developer.interceptors.OkHttpOAuth1Interceptor;
 import com.mastercard.developer.utils.AuthenticationUtils;
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiClient;
+import com.mastercard.fld.api.fld.ApiException;
 import com.mastercard.fld.utility.EncryptionHelper;
 
 import okhttp3.logging.HttpLoggingInterceptor;
-import java.util.Properties;
 
 /**
  * This class Prepare the Https client with provided User Credential
@@ -118,4 +121,21 @@ public class BaseClassUtil {
 																											// lib
 				.build());
 	}
+	
+	public static ApiCallback getCallback() {
+        return new ApiCallback() {
+            public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+            	//empty method
+            }
+            public void onDownloadProgress(long bytesRead, long contentLength, boolean done) { 
+            	//empty method
+            }
+            public void onFailure(ApiException e, int statusCode, Map responseHeaders) {
+            	//empty method
+            }
+            public void onSuccess(Object result, int statusCode, Map responseHeaders) {
+            	//empty method
+            }
+        };
+    }
 }

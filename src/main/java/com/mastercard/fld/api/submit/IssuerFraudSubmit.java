@@ -1,37 +1,42 @@
 package com.mastercard.fld.api.submit;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mastercard.developer.encryption.EncryptionException;
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiException;
-import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudSubmissionApi;
 import com.mastercard.fld.api.fld.model.CfcIndicator;
-import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.IssuerFraud;
 import com.mastercard.fld.api.fld.model.TransactionIdentifier;
 import com.mastercard.fld.utility.LoggerUtil;
 import com.mastercard.fld.utility.RequestHelper;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class IssuerFraudSubmit {
 
-	public RequestHelper helper = new RequestHelper();
+	private RequestHelper helper = new RequestHelper();
 	
 	public static void main(String[] args) {
 		IssuerFraudSubmit call = new IssuerFraudSubmit();
 		call.submitIssuerFraud(call.createRequest());
 	}
 
-	public ApiResponse<Fraud> submitIssuerFraud(IssuerFraud additionIssuer) {
-		ApiResponse<Fraud> response = null;
+	public Response submitIssuerFraud(IssuerFraud additionIssuer) {
+		ApiCallback callback = helper.getCallback();
 		ConfirmedFraudSubmissionApi submissionApi = null;
+		Response response = null;
 		try {
-			helper.initiateEncryptClient();;
-			submissionApi = helper.apiSubmissionclient();
-			response = submissionApi.submitIssuerFraudWithHttpInfo(additionIssuer);
+			helper.initiateEncryptClient();
+			submissionApi = new ConfirmedFraudSubmissionApi(helper.getClient());
+			Call call = submissionApi.submitIssuerFraudCall(additionIssuer, callback);
+			response = helper.apiCall(call);
 			LoggerUtil.logResponse(submissionApi.getApiClient().getBasePath() + "/issuer-frauds", "post", response);
-		} catch (ApiException | EncryptionException exception) {
+		} catch (ApiException | EncryptionException | IOException exception) {
 			return null;
 		}
 		return response;

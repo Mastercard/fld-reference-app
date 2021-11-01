@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
-import com.mastercard.fld.api.fld.ApiResponse;
-import com.mastercard.fld.api.fld.model.Fraud;
+import okhttp3.Response;
 
 public class LoggerUtil {
 
@@ -22,16 +20,15 @@ public class LoggerUtil {
 		return new BufferedWriter(fw);
 	}
 
-	public static void logResponse(String url, String method, ApiResponse<Fraud> response) {
+	public static void logResponse(String url, String method, Response response) {
 		BufferedWriter bw;
-		Gson gson = new Gson();
 		try {
 			bw = getWriter();
 			bw.write("Sending Request: [" + method + "] " + url);
 			bw.newLine();
 			bw.newLine();
-			bw.write("Response: " + response.getStatusCode() + " " + gson.toJson(response.getData()));
-			bw.newLine();
+			bw.write("Response: " + response.code() + " " + response.body().string());
+            bw.newLine();
 			bw.newLine();
 			bw.close();
 		} catch (IOException e) {

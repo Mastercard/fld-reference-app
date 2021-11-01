@@ -3,26 +3,35 @@ package com.mastercard.fld.api.manage;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiClient;
 import com.mastercard.fld.api.fld.ApiException;
-import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
-import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.FraudDeleteAndConfirm;
 import com.mastercard.fld.utility.RequestHelper;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class SuspendToConfirmTest {
 
 	@InjectMocks
-	SuspendToConfirm call;
+	@Spy
+	SuspendToConfirm suspendToConfirm;
 	
 	@Mock
 	RequestHelper helper;
@@ -33,13 +42,18 @@ public class SuspendToConfirmTest {
 	@Mock
 	ApiClient apiclient;
 	
+	@Mock
+	ApiCallback callback;
+
+	@Mock
+	Call call;
+	
 	FraudDeleteAndConfirm request;
 	
 	@Before
     public void init() {
 		MockitoAnnotations.initMocks(this);
-		SuspendToConfirm call = new SuspendToConfirm();
-		request = call.createRequest();
+		request = suspendToConfirm.createRequest();
     }
 
     @Test
@@ -48,14 +62,16 @@ public class SuspendToConfirmTest {
     }
     
     @Test
-    public void testConfirmFraud() throws ApiException {
-    	ApiResponse<Fraud> response = new ApiResponse<>(200, new HashMap<>());
+    public void testConfirmFraud() throws ApiException, IOException {
+    	Response response = new Response.Builder().request(new Request.Builder().url("http://url.com").build())
+				.protocol(Protocol.HTTP_1_1).code(200).message("")
+				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
+    	when(helper.getCallback()).thenReturn(callback);
+		when(helper.getClient()).thenReturn(apiclient);
 		when(helper.apiManageclient()).thenReturn(fraudApi);
-		when(fraudApi.fraudStateWithHttpInfo(request)).thenReturn(response);
+		when(fraudApi.fraudStateCall(Mockito.any(), Mockito.any())).thenReturn(call);
+		Mockito.doReturn(response).when(helper).apiCall(Mockito.any());
 		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
-		when(fraudApi.getApiClient()).thenReturn(apiclient);
-		call.confirmFraud(request);
-		assertNotNull(response);
-		
+		suspendToConfirm.confirmFraud(request);
     }
 }

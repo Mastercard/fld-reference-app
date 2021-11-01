@@ -31,7 +31,7 @@ This reference implementation showcases the Fraud and Loss Database (FLD) APIs f
 2. Create a new project [here](https://developer.mastercard.com/dashboard).
 3. Add the Fraud And Loss Database API to your project and click continue.
 4. Give your project a name and optionally invite other team members, then click continue.
-5. Download the Sandbox Signing Key zip and unzip it. This should result in a `.p12` file. **Note**: On Safari, the file name will be `Unknown`. Rename it to a `.p12` extension.
+5. Download the Sandbox Signing Key zip and unzip it. This should result in a `.p12` file.
 6. Finish creating the project.
 7. Navigate to your projects page, found [here](https://developer.mastercard.com/dashboard) and select your project.
 8. Here, under your sandbox keys, you should be able to see a consumer key, default keystore alias and default keystore password.
@@ -44,10 +44,8 @@ This reference implementation showcases the Fraud and Loss Database (FLD) APIs f
     - ```mastercard.fld.client.ref.app.keystore.password``` -  Password of your Keystore. Default keystore password for sandbox project is ```keystorepassword```.
     - ```mastercard.fld.client.ref.app.encryption.file ```- Path to encryption key (.pem) file, just change the name as per the downloaded file in step 9, e.g. ```src/main/resources/<fileName>.pem```.
 	- ```mastercard.fld.client.ref.app.encryption.key``` - Copy the encryption key from "Sandbox/Production Keys" section on your project page
-11. Download the most recent yaml file, available [here](https://developer.mastercard.com/fld-fraud-submission/documentation/api-reference/) by clicking on the Open Specification link at the top of the page.
-12. Copy this file into your `src/main/resources` folder and rename it `swagger.yaml`.
-13. Run `mvn clean install` from the root of the project directory.
-14. You should now be able to run all the provided API calls that are organized under `src/main/java/com/mastercard/fld/api`.  
+11. Run `mvn clean install` from the root of the project directory.
+12. You should now be able to run all the provided API calls that are organized under `src/main/java/com/mastercard/fld/api`.  
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

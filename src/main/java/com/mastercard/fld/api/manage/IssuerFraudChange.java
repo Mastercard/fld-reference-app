@@ -1,33 +1,38 @@
 package com.mastercard.fld.api.manage;
 
+import java.io.IOException;
+
 import com.mastercard.developer.encryption.EncryptionException;
+import com.mastercard.fld.api.fld.ApiCallback;
 import com.mastercard.fld.api.fld.ApiException;
-import com.mastercard.fld.api.fld.ApiResponse;
 import com.mastercard.fld.api.fld.api.ConfirmedFraudManagementApi;
-import com.mastercard.fld.api.fld.model.Fraud;
 import com.mastercard.fld.api.fld.model.UpdatedIssuerFraud;
 import com.mastercard.fld.utility.LoggerUtil;
 import com.mastercard.fld.utility.RequestHelper;
 
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class IssuerFraudChange {
 
-	public RequestHelper helper = new RequestHelper();
+	private RequestHelper helper = new RequestHelper();
 	
 	public static void main(String[] args) {
-		IssuerFraudChange call = new IssuerFraudChange();
-		call.submitIssuerFraudChange(call.createChangeRequest("292328194169030", "2742"));
+		IssuerFraudChange issuerFraudChange = new IssuerFraudChange();
+		issuerFraudChange.submitIssuerFraudChange(issuerFraudChange.createChangeRequest("292328194169030", "2742"));
 	}
 
-	public ApiResponse<Fraud> submitIssuerFraudChange(UpdatedIssuerFraud changeIssuer) {
+	public Response submitIssuerFraudChange(UpdatedIssuerFraud changeIssuer) {
 		ConfirmedFraudManagementApi manageApi = null;
-		ApiResponse<Fraud> response = null;
+		ApiCallback callback = helper.getCallback();
+		Response response = null;
 		try {
 			helper.initiateEncryptClient();
-			manageApi = helper.apiManageclient();
-			response = manageApi.updateIssuerFraudWithHttpInfo(changeIssuer);
-			
+			manageApi = new ConfirmedFraudManagementApi(helper.getClient());
+			Call call = manageApi.updateIssuerFraudCall(changeIssuer, callback);
+			response = helper.apiCall(call);
 			LoggerUtil.logResponse(manageApi.getApiClient().getBasePath() + "/issuer-frauds", "put", response);
-		} catch (ApiException | EncryptionException exception) {
+		} catch (ApiException | EncryptionException | IOException exception) {
 			return null;
 		}
 		return response;
