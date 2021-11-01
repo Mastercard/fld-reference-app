@@ -68,7 +68,6 @@ public class SuspendToConfirmTest {
 				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
     	when(helper.getCallback()).thenReturn(callback);
 		when(helper.getClient()).thenReturn(apiclient);
-		when(helper.apiManageclient()).thenReturn(fraudApi);
 		when(fraudApi.fraudStateCall(Mockito.any(), Mockito.any())).thenReturn(call);
 		Mockito.doReturn(response).when(helper).apiCall(Mockito.any());
 		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");

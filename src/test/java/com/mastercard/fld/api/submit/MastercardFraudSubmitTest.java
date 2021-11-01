@@ -69,7 +69,6 @@ public class MastercardFraudSubmitTest {
 				.body(ResponseBody.create(MediaType.parse("application/json"), "aaa")).build();
     	when(helper.getCallback()).thenReturn(callback);
 		when(helper.getClient()).thenReturn(apiclient);
-		when(helper.apiSubmissionclient()).thenReturn(fraudApi);
 		when(apiclient.getBasePath()).thenReturn("https://sandbox.api.mastercard.com/fld/confirmed-frauds");
 		when(fraudApi.getApiClient()).thenReturn(apiclient);
 		when(fraudApi.submitMastercardFraudCall(Mockito.any(), Mockito.any())).thenReturn(call);
