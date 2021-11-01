@@ -17,7 +17,7 @@ public class EncryptionHelperTest {
     @Test
     public void testEncryptionConfig() {
     	try {
-			assertNotNull(EncryptionHelper.encryptionConfig("src/test/resources/test.pem","571d7e899c5e08f8d31468ef8c81fea65abf70fa31392db6f77e4755b9e574a7"));
+			assertNotNull(EncryptionHelper.encryptionConfig("src/test/resources/dummy.pem","571d7e899c5e08f8d31468ef8c81fea65abf70fa31392db6f77e4755b9e574a7"));
 		} catch (EncryptionException e) {
 			e.printStackTrace();
 		}
