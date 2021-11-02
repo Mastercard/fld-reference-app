@@ -79,21 +79,9 @@ Several tutorials have been provided under `src/test/java/com/mastercard/fld/api
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Service Documentation
-
-Fraud and Loss Database service documentation can be found [here](https://developer.mastercard.com/product/fraud-and-loss-database).
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-## Use Cases
-
-Fraud and Loss Database service use cases can be found [here](https://developer.mastercard.com/fld-fraud-submission/documentation/use-cases/).
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Documentation for API Endpoints
 
-*NOTE: Make sure you use the latest Fraud and Loss Database API specification. See documentation [here](https://developer.mastercard.com/fld-fraud-submission/documentation/api-reference/).*
+*NOTE: Make sure you use the latest Fraud and Loss Database API specification.
 
 | Class | Method | HTTP request |
 |:------------ |:------------- |:-------------|
