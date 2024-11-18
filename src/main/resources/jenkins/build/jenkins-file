@@ -1,0 +1,54 @@
+@Library('JenkinsSharedLib')_
+pipeline {
+
+    agent { node { label 'DTL-LINUX' } }
+
+    tools {
+        jdk 'ZJDK11'
+    }
+
+    environment {
+    sonarProjectKey = "fld-reference-app-key"
+    sonarProjectName = "fld-reference-app"
+    sonarQualityGate = "FLD"
+    }
+
+    stages {
+        stage('Build and Package Code') {
+            steps {
+                sh "${tool 'M3'}/bin/mvn clean package -DskipTests=true"
+            }
+        }
+        stage('Setup project in Sonar') {
+            steps {
+              script{
+                sonarProjectSetup(sonarProjectKey: '${sonarProjectKey}',
+                                  sonarProjectName: "${sonarProjectName}",
+                                  sonarBranchName: '${env.BRANCH_NAME}',
+                                  sonarQualityGateId: '${sonarQualityGate}')
+              }
+            }
+        }
+        stage('Run Tests and Gather Coverage') {
+            steps {
+                sh "${tool 'M3'}/bin/mvn org.jacoco:jacoco-maven-plugin:prepare-agent install"
+                sh "${tool 'M3'}/bin/mvn org.jacoco:jacoco-maven-plugin:report"
+            }
+        }
+       stage('Generate Sonar Report and Check QG') {
+            steps {
+                sh "${tool 'M3'}/bin/mvn sonar:sonar \
+                                  -Dsonar.login='${SONAR_LOGIN_TOKEN}' \
+                                  -Dsonar.projectKey='${sonarProjectKey}' \
+                                  -Dsonar.projectName='${sonarProjectName}' \
+              					  -Dsonar.branch.name='${env.BRANCH_NAME}' \
+              					  -Dsonar.exclusions='src/main/java/com/mastercard/fld/utility/*.*,src/main/java/com/mastercard/fld/fraud/confirmed/BaseClassUtil.java, src/test/java/com/mastercard/fld/fraud/suspected/api/utility/EncryptionHelperTest.java ,src/main/java/com/mastercard/fld/fraud/constants/Constants.java ,src/main/java/com/mastercard/fld/fraud/suspected/BaseClassUtil.java ,src/main/java/com/mastercard/fld/fraud/suspected/helper/RequestHelper.java, src/main/java/com/mastercard/fld/fraud/confirmed/helper/RequestHelper.java,src/main/java/com/mastercard/fld/fraud/confirmed/api/manage/ConfirmedHealthStatus.java,src/main/java/com/mastercard/fld/fraud/confirmed/api/manage/SuspectedHealthStatus.java,src/main/java/com/mastercard/fld/fraud/suspected/api/manage/SuspectedHealthStatus.java,src/main/java/com/mastercard/fld/fraud/suspected/api/manage/SuspectedFraudStatus.java'"
+            }
+        }
+    }
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+        }
+    }
+}

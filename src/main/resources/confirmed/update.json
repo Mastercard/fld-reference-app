@@ -1,0 +1,14 @@
+{
+  "timestamp": "2024-04-24T20:34:37-06:00",
+  "refId": "e02af351-8488-4e24-b8c7-2831bb23fe63",
+  "icaNumber": "3043",
+  "auditControlNumber": "283554908789760",
+  "fraudPostedDate": "20240424",
+  "fraudTypeCode": "02",
+  "fraudSubTypeCode": "",
+  "accountDeviceType": "",
+  "cardholderReportedDate": "",
+  "cardInPossession": "",
+  "memo": "updating fraud type code"
+}
+

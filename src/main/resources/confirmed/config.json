@@ -1,0 +1,25 @@
+{
+  "timestamp": "2024-07-24T20:34:37-06:00",
+  "icaNumber": "3043",
+  "refId": "ecbqdq42-edbd-12b6-87sd-69c19692bdc6",
+  "providerId": "10",
+  "transactionIdentifiers": [
+    {
+      "cfcKey": "ARN",
+      "cfcValue": "01111111007000000033297"
+    }
+  ],
+  "cardNumber": "5411057700000007527",
+  "transactionAmount": "2126",
+  "transactionDate": "20231007",
+  "fraudTypeCode": "00",
+  "fraudPostedDate": "20231016",
+  "fraudSubTypeCode": "K",
+  "cardholderReportedDate": "20231016",
+  "accountDeviceType": "1",
+  "avsResponseCode": "U",
+  "cardInPossession": "Y",
+  "authResponseCode": "01",
+  "memo": "This is a sample FDA minimal request.",
+  "issuerSCAExemption": "04"
+}
